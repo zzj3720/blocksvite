@@ -1,0 +1,16 @@
+{
+  "name": "@blocksvite/blocks",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "main": "src/main.ts",
+  "scripts": {},
+  "dependencies": {
+    "@blocksuite/store": "0.5.0-alpha.4",
+    "@blocksuite/virgo": "0.5.0-alpha.4",
+    "@vueuse/core": "^10.1.0",
+    "lit": "^2.7.2",
+    "vue": "^3.2.45",
+    "zod": "^3.21.4"
+  }
+}

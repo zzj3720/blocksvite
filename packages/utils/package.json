@@ -1,0 +1,12 @@
+{
+  "name": "@blocksvite/utils",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "main": "src/main.ts",
+  "scripts": {
+  },
+  "dependencies": {
+    "vue": "^3.2.45"
+  }
+}

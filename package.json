@@ -1,0 +1,12 @@
+{
+  "name": "blocksvite",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm --filter @blocksvite/playground dev"
+  },
+  "dependencies": {
+    "typescript": "^5.0.4"
+  }
+}
