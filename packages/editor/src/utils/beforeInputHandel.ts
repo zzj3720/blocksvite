@@ -1,7 +1,7 @@
-import {assertExists, BaseBlockModel, Page, Text as YText} from "@blocksuite/store";
-import {VRange} from "./VRange";
-import {getSegments} from "./range";
-import {VSelection} from "./VSelection";
+import { assertExists, BaseBlockModel, Page, Text as YText } from "@blocksuite/store";
+import { getSegments } from "./range";
+import { VRange } from "./VRange";
+import { VSelection } from "./VSelection";
 
 const deleteSelected = (page: Page, vRange: VRange, selection: VSelection) => {
     const {start, end, others} = vRange.getAllSelectedModel();

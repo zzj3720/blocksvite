@@ -1,5 +1,5 @@
-import {assertExists, BaseBlockModel, Page} from "@blocksuite/store";
-import {findModelDom, getDomPointByVPoint, getModelFromNode, getPointFromNativePoint} from "./range";
+import { BaseBlockModel, Page } from "@blocksuite/store";
+import { getDomPointByVPoint, getPointFromNativePoint } from "./range";
 
 export class VRange {
     isCollapsed: boolean;

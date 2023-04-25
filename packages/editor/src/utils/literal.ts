@@ -5,7 +5,7 @@ export interface StaticValue {
 
 export const literal = (str: string): StaticValue => {
     return {
-        _$litStatic$: '',
+        _$litStatic$: str,
         r: Symbol.for('')
     } as StaticValue
 }

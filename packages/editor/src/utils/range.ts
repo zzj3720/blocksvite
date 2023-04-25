@@ -1,4 +1,4 @@
-import {BaseBlockModel, Page} from "@blocksuite/store";
+import { BaseBlockModel, Page } from "@blocksuite/store";
 
 export const nativeRange = () => {
     const selection = getSelection();

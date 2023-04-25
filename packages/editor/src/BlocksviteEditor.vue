@@ -32,12 +32,12 @@ const beforeinput = (evt: Event) => {
     if (!(evt instanceof InputEvent)) {
         return
     }
-    const selection = blockService.getVSelection();
+    const selection = blockService!.getVSelection();
     const vRange = selection.getRange();
     if (!vRange) {
         return;
     }
-    console.log(evt.inputType, vRange.startOffset, nativeRange().startOffset);
+    console.log(evt.inputType, vRange.startOffset, nativeRange()?.startOffset);
     // You can find explanation of inputType here:
     // [Input Events Level 2](https://w3c.github.io/input-events/#interface-InputEvent-Attributes)
     switch (evt.inputType) {
@@ -86,11 +86,11 @@ const beforeinput = (evt: Event) => {
     }
 }
 const compositionstart = (evt: CompositionEvent) => {
-    const selection = blockService.getVSelection();
+    const selection = blockService!.getVSelection();
     selection.lockSync()
 }
 const compositionend = (evt: CompositionEvent) => {
-    const selection = blockService.getVSelection();
+    const selection = blockService!.getVSelection();
     selection.lockSync(false)
     const vRange = selection.getRange();
     if (!vRange) {
