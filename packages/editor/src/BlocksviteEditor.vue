@@ -1,7 +1,16 @@
 <script setup lang="ts">
 import {Disposable as IDisposable, Page} from "@blocksuite/store";
-import {BlockService} from '@blocksvite/blocks'
 import {computed, inject, onUnmounted, shallowRef} from "vue";
+import {BlockService} from "./utils/children";
+import {
+    handleDelete,
+    handleForwardDelete,
+    handleInsertParagraph,
+    handleInsertText,
+    handleLineDelete,
+    handleWordDelete
+} from "./utils/beforeInputHandel";
+import {cleanDom, nativeRange} from "./utils/range";
 
 const props = defineProps<{
     page: Page
@@ -17,16 +26,97 @@ onUnmounted(() => {
 })
 const blockService = inject(BlockService)
 const Render = computed(() => root.value && blockService?.component(root.value))
-// useEventListener('keydown', (evt) => {
-//     if (!evt.altKey && !evt.metaKey && !evt.ctrlKey&&root.value) {
-//         props.page.captureSync()
-//     }
-// }, {capture: true})
+
+const beforeinput = (evt: Event) => {
+    evt.preventDefault();
+    if (!(evt instanceof InputEvent)) {
+        return
+    }
+    const selection = blockService.getVSelection();
+    const vRange = selection.getRange();
+    if (!vRange) {
+        return;
+    }
+    console.log(evt.inputType, vRange.startOffset, nativeRange().startOffset);
+    // You can find explanation of inputType here:
+    // [Input Events Level 2](https://w3c.github.io/input-events/#interface-InputEvent-Attributes)
+    switch (evt.inputType) {
+        case 'insertLineBreak': {
+            handleInsertText(props.page, vRange, selection, '\n');
+            return;
+        }
+        case 'insertText': {
+            handleInsertText(props.page, vRange, selection, evt.data ?? '');
+            return;
+        }
+
+        case 'insertParagraph': {
+            handleInsertParagraph(props.page, vRange, selection)
+            return;
+        }
+
+        // Chrome and Safari on Mac: Backspace or Ctrl + H
+        case 'deleteContentBackward':
+        case 'deleteByCut': {
+            handleDelete(props.page, vRange, selection);
+            return;
+        }
+
+        // On Mac: Option + Backspace
+        // On iOS: Hold the backspace for a while and the whole words will start to disappear
+        case 'deleteWordBackward': {
+            handleWordDelete(props.page, vRange, selection);
+            return;
+        }
+
+        // deleteHardLineBackward: Safari on Mac: Cmd + Backspace
+        // deleteSoftLineBackward: Chrome on Mac: Cmd + Backspace
+        case 'deleteHardLineBackward':
+        case 'deleteSoftLineBackward': {
+            handleLineDelete(props.page, vRange, selection);
+            return;
+        }
+
+        // Chrome on Mac: Fn + Backspace or Ctrl + D
+        // Safari on Mac: Ctrl + K or Ctrl + D
+        case 'deleteContentForward': {
+            handleForwardDelete(props.page, vRange, selection);
+            return;
+        }
+    }
+}
+const compositionstart = (evt: CompositionEvent) => {
+    const selection = blockService.getVSelection();
+    selection.lockSync()
+}
+const compositionend = (evt: CompositionEvent) => {
+    const selection = blockService.getVSelection();
+    selection.lockSync(false)
+    const vRange = selection.getRange();
+    if (!vRange) {
+        return
+    }
+
+    handleInsertText(props.page, vRange, selection, evt.data)
+    cleanDom(vRange.startModel)
+}
 </script>
 
 <template>
-    <component :is="Render" :model="root"></component>
+    <div
+            class="editor"
+            contenteditable="true" @beforeinput="beforeinput" @compositionstart="compositionstart"
+            @compositionend="compositionend">
+        <component :is="Render" :model="root"></component>
+    </div>
 </template>
 
 <style scoped>
+.editor {
+    line-height: 1.5;
+    font-size: 16px;
+    border: 2px solid black;
+    outline: none;
+    border-radius: 4px;
+}
 </style>

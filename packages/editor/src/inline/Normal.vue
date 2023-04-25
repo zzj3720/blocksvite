@@ -1,12 +1,10 @@
 <template>
-    <span :class="classNames">
-        {{ text }}
-    </span>
+    <span :class="classNames" class="segment">{{ text.endsWith('\n') ? text + '\n' : text }}</span>
 </template>
 
 <script lang="ts" setup>
 import {computed} from "vue";
-import {BaseTextAttributes} from "./base-attributes";
+import {BaseTextAttributes} from "../utils/base-attributes";
 
 const props = defineProps<{
     attributes: BaseTextAttributes;
@@ -22,8 +20,12 @@ const classNames = computed(() => {
 .bold {
     font-weight: bold;
 }
-.italic{
+
+.italic {
     font-style: italic;
 }
 
+.segment {
+
+}
 </style>

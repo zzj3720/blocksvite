@@ -1,5 +1,5 @@
 <template>
-    <div style="border: 1px solid gray">
+    <div>
         <RichTextView :model="model"></RichTextView>
         <RenderChildren :model="model"/>
     </div>

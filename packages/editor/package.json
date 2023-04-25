@@ -7,9 +7,9 @@
   "scripts": {},
   "dependencies": {
     "@blocksuite/store": "^0.5.0-alpha.4",
-    "@blocksvite/blocks": "workspace:*",
     "@vueuse/core": "^10.1.0",
-    "vue": "^3.2.45"
+    "vue": "^3.2.45",
+    "zod": "^3.21.4"
   },
   "description": "",
   "author": "zuozijian1994@gmail.com",

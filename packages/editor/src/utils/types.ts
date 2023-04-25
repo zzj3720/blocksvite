@@ -1,5 +1,4 @@
 import {BaseTextAttributes} from "./base-attributes";
-import {BaseBlockModel} from "@blocksuite/store";
 
 export type Segment = {
     text: string;

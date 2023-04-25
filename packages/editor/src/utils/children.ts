@@ -1,9 +1,9 @@
 import {Component, InjectionKey} from "vue";
-import {BaseBlockModel, Disposable} from "@blocksuite/store";
+import {BaseBlockModel} from "@blocksuite/store";
+import {VSelection} from "./VSelection";
 
 export type BlockService = {
     component: (model: BaseBlockModel) => Component<{ model: BaseBlockModel }>
-    onDrag(ops: { start: () => void, end: () => void }): Disposable
-    compositionStart(): void;
+    getVSelection(): VSelection
 }
 export const BlockService: InjectionKey<BlockService> = Symbol('BlockService')

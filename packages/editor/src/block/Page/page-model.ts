@@ -1,6 +1,6 @@
-import type { Text } from '@blocksuite/store';
-import { BaseBlockModel, defineBlockSchema } from '@blocksuite/store';
-import { literal } from 'lit/static-html.js';
+import type {Text} from '@blocksuite/store';
+import {BaseBlockModel, defineBlockSchema} from '@blocksuite/store';
+import {literal} from "../../utils/literal";
 
 type PageProps = {
     title: Text;
@@ -10,7 +10,7 @@ export class PageBlockModel extends BaseBlockModel<PageProps> {
     override onCreated() {
         super.onCreated();
 
-        this.page.slots.blockUpdated.on(({ type }) => {
+        this.page.slots.blockUpdated.on(({type}) => {
             if (type === 'add') {
                 this.page.workspace.setPageMeta(this.page.id, {
                     title: this.title.toString(),
@@ -28,7 +28,7 @@ export const PageBlockSchema = defineBlockSchema({
     metadata: {
         version: 2,
         role: 'root',
-        tag: literal`affine-page`,
+        tag: literal('affine-page'),
     },
     toModel: () => new PageBlockModel(),
 });
