@@ -11,6 +11,7 @@ const page = useEditor([ParagraphBlock, PageBlock])
 provideBlocks([ParagraphBlock, PageBlock], page)
 const pageBlockId = page.addBlock('affine:page');
 page.addBlock('affine:paragraph', {}, pageBlockId);
+page.history.clear();
 (window as any).page = page;
 </script>
 

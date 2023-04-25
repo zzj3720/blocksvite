@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {Disposable as IDisposable, Page} from "@blocksuite/store";
+import {Disposable as IDisposable, Page, StackItem} from "@blocksuite/store";
 import {computed, inject, onUnmounted, shallowRef} from "vue";
 import {BlockService} from "./utils/children";
 import {
@@ -8,9 +8,10 @@ import {
     handleInsertParagraph,
     handleInsertText,
     handleLineDelete,
-    handleWordDelete
+    handleWordDelete, transact
 } from "./utils/beforeInputHandel";
 import {cleanDom, nativeRange} from "./utils/range";
+import {useEventListener} from "@vueuse/core";
 
 const props = defineProps<{
     page: Page
@@ -20,13 +21,39 @@ const disposeArr: IDisposable[] = [
     props.page.slots.rootAdded.on(() => {
         root.value = props.page.root
     }),
+    props.page.slots.rootDeleted.on(() => {
+        root.value = undefined
+    }),
 ]
+const historyPopped = (event: { stackItem: StackItem }) => {
+    const userRange = event.stackItem.meta.get('cursor-location');
+    if (!userRange) {
+        return;
+    }
+    console.log(userRange)
+    blockService.getVSelection().syncFromStack(userRange)
+}
+props.page.history.on('stack-item-popped', historyPopped);
 onUnmounted(() => {
     disposeArr.forEach(f => f.dispose())
+    props.page.history.off('stack-item-popped', historyPopped)
 })
 const blockService = inject(BlockService)
 const Render = computed(() => root.value && blockService?.component(root.value))
 
+useEventListener('keydown', (ev) => {
+    if (!blockService?.getVSelection().vRange) {
+        return
+    }
+    if (ev.metaKey && ev.key === 'z') {
+        props.page.undo()
+        ev.preventDefault();
+    }
+    if (ev.metaKey && ev.shiftKey && ev.key === 'z') {
+        props.page.redo()
+        ev.preventDefault();
+    }
+})
 const beforeinput = (evt: Event) => {
     evt.preventDefault();
     if (!(evt instanceof InputEvent)) {
@@ -43,30 +70,30 @@ const beforeinput = (evt: Event) => {
     switch (evt.inputType) {
         case 'insertLineBreak': {
             handleInsertText(props.page, vRange, selection, '\n');
-            return;
+            break;
         }
         case 'insertText': {
             handleInsertText(props.page, vRange, selection, evt.data ?? '');
-            return;
+            break;
         }
 
         case 'insertParagraph': {
             handleInsertParagraph(props.page, vRange, selection)
-            return;
+            break;
         }
 
         // Chrome and Safari on Mac: Backspace or Ctrl + H
         case 'deleteContentBackward':
         case 'deleteByCut': {
             handleDelete(props.page, vRange, selection);
-            return;
+            break;
         }
 
         // On Mac: Option + Backspace
         // On iOS: Hold the backspace for a while and the whole words will start to disappear
         case 'deleteWordBackward': {
             handleWordDelete(props.page, vRange, selection);
-            return;
+            break;
         }
 
         // deleteHardLineBackward: Safari on Mac: Cmd + Backspace
@@ -74,14 +101,14 @@ const beforeinput = (evt: Event) => {
         case 'deleteHardLineBackward':
         case 'deleteSoftLineBackward': {
             handleLineDelete(props.page, vRange, selection);
-            return;
+            break;
         }
 
         // Chrome on Mac: Fn + Backspace or Ctrl + D
         // Safari on Mac: Ctrl + K or Ctrl + D
         case 'deleteContentForward': {
             handleForwardDelete(props.page, vRange, selection);
-            return;
+            break;
         }
     }
 }
@@ -104,6 +131,7 @@ const compositionend = (evt: CompositionEvent) => {
 
 <template>
     <div
+            v-if="root"
             class="editor"
             contenteditable="true" @beforeinput="beforeinput" @compositionstart="compositionstart"
             @compositionend="compositionend">

@@ -1,5 +1,5 @@
 import {VRange} from "./VRange";
-import {Page} from "@blocksuite/store";
+import {Page, UserRange} from "@blocksuite/store";
 import {nativeRange} from "./range";
 
 export class VSelection {
@@ -10,7 +10,7 @@ export class VSelection {
 
     setRange(range?: VRange) {
         this._range = range;
-        this.applyToDom();
+        this.applyToDomAndStore();
     }
 
     getRange(): VRange | undefined {
@@ -43,28 +43,42 @@ export class VSelection {
         const native = nativeRange();
         if (native) {
             this._range = VRange.syncFromNative(this._page, native)
+            this._range.applyToStore();
         }
+    }
+
+    syncFromStack(userRange: UserRange) {
+        const startModel = this._page.getBlockById(userRange.blockIds[0]);
+        const endModel = this._page.getBlockById(userRange.blockIds[userRange.blockIds.length - 1]);
+        if (!startModel || !endModel) return
+        this._range = new VRange(this._page, startModel, userRange.startOffset, endModel, userRange.endOffset);
+        console.log(this._range);
+        requestAnimationFrame(() => {
+            this._range?.applyToDom();
+        })
     }
 
     private appliedInFrame = 0;
 
-    applyToDom() {
+    applyToDomAndStore() {
         if (this.appliedInFrame) {
             return;
         }
         this._lockSync = true;
         this.appliedInFrame = requestAnimationFrame(() => {
             this._range?.applyToDom()
+            this._range?.applyToStore()
             this._lockSync = false;
             this.appliedInFrame = 0;
         })
     }
 
-    forceApply(){
+    forceApply() {
         this._range?.applyToDom()
     }
 
     lockSync(value = true) {
         this._lockSync = value
     }
+
 }

@@ -1,5 +1,5 @@
-import { BaseBlockModel, Page } from "@blocksuite/store";
-import { getDomPointByVPoint, getPointFromNativePoint } from "./range";
+import {BaseBlockModel, Page} from "@blocksuite/store";
+import {getDomPointByVPoint, getPointFromNativePoint} from "./range";
 
 export class VRange {
     isCollapsed: boolean;
@@ -58,13 +58,23 @@ export class VRange {
         const selection = getSelection();
         if (selection) {
             const startPoint = getDomPointByVPoint(this._startModel, this._startOffset);
-            const endPoint = getDomPointByVPoint(this._startModel, this._startOffset);
+            const endPoint = getDomPointByVPoint(this._endModel, this._endOffset);
             const range = new Range()
+            console.log(range,startPoint,endPoint)
             range.setStart(startPoint.node, startPoint.offset)
             range.setEnd(endPoint.node, endPoint.offset)
             selection.removeAllRanges();
             selection.addRange(range)
         }
+    }
+
+    applyToStore() {
+        const {start, end, others} = this.getAllSelectedModel();
+        this._page.awarenessStore.setLocalRange(this._page, {
+            startOffset: start.offset,
+            endOffset: end.offset,
+            blockIds: start.model === end.model ? [start.model.id] : [start.model.id, ...others.map(v => v.id), end.model.id]
+        })
     }
 }
 

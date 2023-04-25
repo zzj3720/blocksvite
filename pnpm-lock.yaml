@@ -32,11 +32,13 @@ importers:
       '@blocksuite/store': ^0.5.0-alpha.4
       '@vueuse/core': ^10.1.0
       vue: ^3.2.45
+      yjs: ^13.5.53
       zod: ^3.21.4
     dependencies:
-      '@blocksuite/store': 0.5.0-alpha.4
+      '@blocksuite/store': 0.5.0-alpha.4_yjs@13.5.53
       '@vueuse/core': 10.1.0_vue@3.2.47
       vue: 3.2.47
+      yjs: 13.5.53
       zod: 3.21.4
 
   packages/utils:
@@ -82,13 +84,13 @@ packages:
       zod: 3.21.4
     dev: false
 
-  /@blocksuite/store/0.5.0-alpha.4:
+  /@blocksuite/store/0.5.0-alpha.4_yjs@13.5.53:
     resolution: {integrity: sha512-91CQLLxb3ZSs7LTdy4fI4LjZRJ30X+kORCg5g3JenmkprU4JlOgQQvtwd4S+jlHvlddCtOiN7UHPuQ3jT4ysPg==}
     peerDependencies:
       yjs: ^13
     dependencies:
       '@blocksuite/global': 0.5.0-alpha.4
-      '@blocksuite/virgo': 0.5.0-alpha.4
+      '@blocksuite/virgo': 0.5.0-alpha.4_yjs@13.5.53
       '@types/flexsearch': 0.7.3
       buffer: 6.0.3
       flexsearch: 0.7.21
@@ -99,6 +101,7 @@ packages:
       nanoid: 4.0.2
       y-protocols: 1.0.5
       y-webrtc: 10.2.5
+      yjs: 13.5.53
       zod: 3.21.4
     transitivePeerDependencies:
       - bufferutil
@@ -107,13 +110,14 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@blocksuite/virgo/0.5.0-alpha.4:
+  /@blocksuite/virgo/0.5.0-alpha.4_yjs@13.5.53:
     resolution: {integrity: sha512-jNBYN5BUXlwdagTufydOr51koPeoMFo47Pts5YC15RyvoNXRUVRzDVQsYgRP504ozYrG/1VsJjAUlsD7OgdXyA==}
     peerDependencies:
       lit: ^2
       yjs: ^13
     dependencies:
       '@blocksuite/global': 0.5.0-alpha.4
+      yjs: 13.5.53
       zod: 3.21.4
     dev: false
 
