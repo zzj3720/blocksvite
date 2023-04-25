@@ -8,7 +8,7 @@ import {
     handleInsertParagraph,
     handleInsertText,
     handleLineDelete,
-    handleWordDelete, transact
+    handleWordDelete
 } from "./utils/beforeInputHandel";
 import {cleanDom, nativeRange} from "./utils/range";
 import {useEventListener} from "@vueuse/core";
@@ -30,7 +30,6 @@ const historyPopped = (event: { stackItem: StackItem }) => {
     if (!userRange) {
         return;
     }
-    console.log(userRange)
     blockService.getVSelection().syncFromStack(userRange)
 }
 props.page.history.on('stack-item-popped', historyPopped);

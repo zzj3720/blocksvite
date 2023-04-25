@@ -52,7 +52,6 @@ export class VSelection {
         const endModel = this._page.getBlockById(userRange.blockIds[userRange.blockIds.length - 1]);
         if (!startModel || !endModel) return
         this._range = new VRange(this._page, startModel, userRange.startOffset, endModel, userRange.endOffset);
-        console.log(this._range);
         requestAnimationFrame(() => {
             this._range?.applyToDom();
         })

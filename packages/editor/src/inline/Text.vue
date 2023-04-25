@@ -4,13 +4,14 @@
             contenteditable="true"
             class="text"
     >
-        <Normal
+        <component
+                :is="render(segment.text,segment.attributes)"
                 v-for="(segment, i) in textLine"
                 :key="i"
                 :data-blocksvite-segment-index="i"
                 :attributes="segment.attributes"
                 :text="segment.text"
-        ></Normal>
+        ></component>
     </div>
 </template>
 
@@ -19,6 +20,7 @@ import {BaseBlockModel} from "@blocksuite/store";
 import {computed, onMounted, onUnmounted, ref} from "vue";
 import {InsertDelta, Line} from "../utils/types";
 import Normal from "./Normal.vue";
+import {render} from "./render";
 
 const props = defineProps<{
     model: BaseBlockModel

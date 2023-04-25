@@ -10,8 +10,8 @@ const props = defineProps<{
     attributes: BaseTextAttributes;
     text: string;
 }>();
-const classNames = computed(() => {
-    return Object.entries(props.attributes).filter(([_, v]) => v === true).map(([key]) => key)
+const classNames = computed<string[]>(() => {
+    return Object.entries(props.attributes).filter(([_, v]) => v === true).map(([key, _]) => key)
 });
 
 </script>
@@ -23,6 +23,20 @@ const classNames = computed(() => {
 
 .italic {
     font-style: italic;
+}
+
+.underline {
+    text-decoration: underline;
+}
+
+.strike {
+    text-decoration: line-through;
+}
+
+.code {
+    border-radius: 4px;
+    background-color: #bbbbbb;
+    padding: 0 4px;
 }
 
 .segment {

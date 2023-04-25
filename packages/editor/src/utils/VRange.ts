@@ -60,7 +60,6 @@ export class VRange {
             const startPoint = getDomPointByVPoint(this._startModel, this._startOffset);
             const endPoint = getDomPointByVPoint(this._endModel, this._endOffset);
             const range = new Range()
-            console.log(range,startPoint,endPoint)
             range.setStart(startPoint.node, startPoint.offset)
             range.setEnd(endPoint.node, endPoint.offset)
             selection.removeAllRanges();
