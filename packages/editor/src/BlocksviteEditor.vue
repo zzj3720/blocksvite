@@ -24,7 +24,7 @@ const disposeArr: IDisposable[] = [
         root.value = props.page.root
     }),
     props.page.slots.rootDeleted.on(() => {
-        root.value = undefined
+        root.value = null
     }),
 ]
 const historyPopped = (event: { stackItem: StackItem }) => {
@@ -39,7 +39,7 @@ onUnmounted(() => {
     disposeArr.forEach(f => f.dispose())
     props.page.history.off('stack-item-popped', historyPopped)
 })
-const blockService = inject(BlockService)
+const blockService = inject(BlockService)!
 const Render = computed(() => root.value && blockService?.component(root.value))
 
 useEventListener('keydown', (ev) => {
@@ -132,7 +132,7 @@ const mouseup = (evt: MouseEvent) => {
     const selection = blockService.getVSelection();
     selection.applyToDomAndStore()
     if (selection.vRange && !selection.vRange.isCollapsed) {
-        const containerRect = containerRef.value.getBoundingClientRect();
+        const containerRect = containerRef.value?.getBoundingClientRect();
         if (!containerRect) {
             throw new Error('this is a bug')
         }

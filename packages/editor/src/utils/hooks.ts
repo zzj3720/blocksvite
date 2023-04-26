@@ -1,8 +1,8 @@
 import {Page, Workspace} from "@blocksuite/store";
 import {provide} from "vue";
-import {BlockType} from "../block/help/types";
 import {VSelection} from "./VSelection";
 import {BlockService} from "./children";
+import { BlockType } from "../block/types";
 
 export const useEditor = (blocks: BlockType[]) => {
     const workspace = new Workspace({id: 'test'}).register(blocks.map(v => v.schema))

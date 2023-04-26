@@ -28,9 +28,9 @@
 </template>
 
 <script setup lang="ts">
-import {computed, inject, ref, shallowRef, watch} from "vue";
+import {computed, inject, ref, shallowRef} from "vue";
 import {BlockService} from "../utils/children";
-import {handleChangeSelectedAttributes, transact} from "../utils/beforeInputHandel";
+import {handleChangeSelectedAttributes} from "../utils/beforeInputHandel";
 import {VRange} from "../utils/VRange";
 
 export type BlockToolBarProps = {
@@ -42,7 +42,6 @@ const props = defineProps<{
     data?: BlockToolBarProps;
     'update:data'?: (data: BlockToolBarProps | undefined) => void;
 }>()
-const show = ref(false);
 const toolbarRef = ref<HTMLDivElement>()
 const actionClass = (actionType: ActionType) => {
     return ['action', attributes.value[actionType] && 'active']
@@ -86,9 +85,9 @@ const computeAttributes = (vRange?: VRange) => {
         return {}
     }
     const deltas = vRange.getDelta();
-    attributes.value = detectAttr(deltas.filter(delta => delta.insert?.length).map(delta => delta.attributes))
+    attributes.value = detectAttr(deltas.filter(delta => delta.insert?.length).map(delta => delta.attributes??{}))
 }
-const service = inject(BlockService)
+const service = inject(BlockService)!
 type ActionType = typeof detectAttrList[number]
 const clickAction = (type: ActionType) => {
     const page = service.getPage();
@@ -114,7 +113,7 @@ const detectAttr = (attrList: Record<string, any>[]) => {
             return {}
         }
         for (const name of needDetect) {
-            if (!Boolean(attr?.[name])) {
+            if (!Boolean(attr[name])) {
                 needDetect.delete(name)
             }
         }

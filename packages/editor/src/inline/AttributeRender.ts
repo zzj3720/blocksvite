@@ -18,9 +18,9 @@ export const AttributeRender = defineComponent({
         const attrs = useAttrs()
         return () => {
             if (props.attributes.link) {
-                return h(Link, mergeProps(attrs, props))
+                return h(Link, mergeProps(attrs, props) as any)
             }
-            return h(Normal, mergeProps(attrs, props))
+            return h(Normal, mergeProps(attrs, props) as any)
         }
     }
 })
