@@ -20,8 +20,8 @@
 <script lang="ts" setup>
 import {BaseBlockModel} from "@blocksuite/store";
 import {computed, onMounted, onUnmounted, ref} from "vue";
-import {InsertDelta, Line} from "../utils/types";
-import {AttributeRender} from "./attributeRender";
+import {Line} from "../utils/types";
+import {AttributeRender} from "./AttributeRender";
 import {getFixedDelta} from "../utils/range";
 
 const props = defineProps<{
