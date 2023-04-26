@@ -79,7 +79,7 @@ const todos = [
     'Full link support',
     'More blocks(Code, Quote, Image etc.)',
     'Cursor UX improve',
-    'Drag and drop',
+    'Drag and Drop',
     'More extensible',
     'Database'
 ];
