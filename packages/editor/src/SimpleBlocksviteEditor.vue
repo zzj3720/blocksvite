@@ -1,9 +1,13 @@
 <template>
-    <div>
-        <h2>BlocksVite Playground</h2>
+    <div style="padding: 0 12px">
+        <div style="display:flex;align-items:center; justify-content: space-between">
+            <h2>BlocksVite Playground</h2>
+            <div style="padding-right: 20px;"><a href="https://github.com/zuozijian3720/blocksvite" target="_blank"><img
+                    style="width: 24px;height: 24px;" :src="githubIcon" alt=""></a></div>
+        </div>
         <BlocksviteEditor :page="page"></BlocksviteEditor>
         <div style="margin-top: 12px;">
-            Vue version of <a href="https://blocksuite.affine.pro/" target="_blank">BlockSuite</a> based on <a
+            A simple Vue version <a href="https://blocksuite.affine.pro/" target="_blank">BlockSuite</a> based on <a
                 href="https://github.com/toeverything/blocksuite" target="_blank">@blocksuite/store</a>
         </div>
         <h3 style="margin-top: 24px;">
@@ -23,6 +27,7 @@
 import BlocksviteEditor from "./BlocksviteEditor.vue";
 import {ListBlock, PageBlock, ParagraphBlock} from "./block";
 import {useEditor} from "./utils/hooks";
+import githubIcon from './github-mark.svg'
 
 const page = useEditor([ParagraphBlock, PageBlock, ListBlock])
 const pageBlockId = page.addBlock('affine:page');
