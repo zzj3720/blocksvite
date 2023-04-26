@@ -10,7 +10,8 @@
             Todo
         </h3>
         <div style="padding-left: 12px">
-            <div style="margin-bottom: 8px;" v-for="(todo,i) in todos" :key="i"><input style="margin-right: 12px;" type="checkbox" disabled>{{
+            <div style="margin-bottom: 8px;" v-for="(todo,i) in todos" :key="i"><input style="margin-right: 12px;"
+                                                                                       type="checkbox" disabled>{{
                 todo
                 }}
             </div>
@@ -45,7 +46,17 @@ const list = page.addBlock('blocksvite:list', {}, pageBlockId);
 const listModel = page.getBlockById(list);
 listModel?.text?.insert('italic', 0, {italic: true});
 page.resetHistory();
-const todos = ['A successful project needs a beautiful icon','Full link support','Slash command', 'More blocks', 'Cursor UX improve', 'Drag and drop', 'More extensible', 'Database'];
+const todos = [
+    'A successful project needs a beautiful icon',
+    'Slash command',
+    'Copy and Paste and Export',
+    'Full link support',
+    'More blocks',
+    'Cursor UX improve',
+    'Drag and drop',
+    'More extensible',
+    'Database'
+];
 (window as any).page = page;
 </script>
 
