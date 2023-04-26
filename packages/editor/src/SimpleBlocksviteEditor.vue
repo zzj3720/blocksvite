@@ -20,6 +20,19 @@
                 }}
             </div>
         </div>
+        <h3 style="margin-top: 24px;">
+            Completed
+        </h3>
+        <div style="padding-left: 12px">
+            <div style="margin-bottom: 8px;" v-for="(feature,i) in featureList" :key="i"><input style="margin-right: 12px;"
+                                                                                       type="checkbox" checked disabled>{{
+                feature
+                }}
+            </div>
+            <div>
+                etc.
+            </div>
+        </div>
     </div>
 </template>
 
@@ -51,12 +64,20 @@ const list = page.addBlock('blocksvite:list', {}, pageBlockId);
 const listModel = page.getBlockById(list);
 listModel?.text?.insert('italic', 0, {italic: true});
 page.resetHistory();
+const featureList = [
+    'Basic inline edit',
+    'Basic block edit',
+    'Mention style',
+    'Undo and Redo',
+    'Inline Formatting Toolbar',
+    'Indent',
+]
 const todos = [
     'A successful project needs a beautiful icon',
     'Slash command',
     'Copy and Paste and Export',
     'Full link support',
-    'More blocks',
+    'More blocks(Code, Quote, Image etc.)',
     'Cursor UX improve',
     'Drag and drop',
     'More extensible',
