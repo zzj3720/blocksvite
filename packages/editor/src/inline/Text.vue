@@ -2,7 +2,7 @@
     <div
             :data-blocksvite-text="props.model.id"
             contenteditable="true"
-            :placeholder="'asd'"
+            :placeholder="'please input'"
             class="text"
     >
         <AttributeRender

@@ -1,6 +1,4 @@
 import {assertExists, BaseBlockModel, Page, Text as YText} from "@blocksuite/store";
-import {date} from "zod";
-import {ZERO_WIDTH_SPACE} from "./consts";
 import {Line, Segment} from "./types";
 
 export const nativeRange = () => {

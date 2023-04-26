@@ -3,8 +3,10 @@ import {Disposable as IDisposable, Page, StackItem} from "@blocksuite/store";
 import {computed, inject, onUnmounted, ref, shallowRef} from "vue";
 import {BlockService} from "./utils/children";
 import {
+    handleCancelIndent,
     handleDelete,
-    handleForwardDelete, handleIndent,
+    handleForwardDelete,
+    handleIndent,
     handleInsertParagraph,
     handleInsertText,
     handleLineDelete,
@@ -13,8 +15,7 @@ import {
 import {cleanDom, nativeRange} from "./utils/range";
 import {useEventListener} from "@vueuse/core";
 import BlockToolBar, {BlockToolBarProps} from "./ui/BlockToolBar.vue";
-import {isHotkey} from 'is-hotkey'
-import {Redo, Tab, Undo} from "./utils/hotkey";
+import {ESC, Redo, ShiftTab, Tab, Undo} from "./utils/hotkey";
 
 const props = defineProps<{
     page: Page
@@ -44,7 +45,8 @@ const blockService = inject(BlockService)!
 const Render = computed(() => root.value && blockService?.component(root.value))
 
 useEventListener('keydown', (ev) => {
-    const vRange = blockService?.getVSelection().vRange;
+    const selection = blockService.getVSelection();
+    const vRange = selection.vRange;
     if (!vRange) {
         return
     }
@@ -57,8 +59,19 @@ useEventListener('keydown', (ev) => {
         ev.preventDefault();
     }
     if (Tab(ev)) {
-        handleIndent(vRange)
+        handleIndent(selection, vRange)
+        ev.preventDefault();
     }
+    if (ShiftTab(ev)) {
+        handleCancelIndent(selection, vRange)
+        ev.preventDefault();
+    }
+    if (ESC(ev)) {
+        console.log(ev)
+        selection.setRange();
+        ev.preventDefault();
+    }
+
 })
 const beforeinput = (evt: Event) => {
     evt.preventDefault();
@@ -153,6 +166,12 @@ const mouseup = (evt: MouseEvent) => {
         showBlockToolBar.value = undefined;
     }
 }
+useEventListener(document, 'selectionchange', () => {
+    const selection = blockService.getVSelection();
+    if (!selection.vRange || selection.vRange.isCollapsed) {
+        showBlockToolBar.value = undefined;
+    }
+})
 const containerRef = ref<HTMLDivElement>()
 const showBlockToolBar = shallowRef<BlockToolBarProps>()
 </script>

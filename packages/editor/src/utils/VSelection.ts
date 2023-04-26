@@ -1,6 +1,6 @@
 import {VRange} from "./VRange";
 import {Page, UserRange} from "@blocksuite/store";
-import {getDomPointByVPoint, nativeRange} from "./range";
+import {nativeRange} from "./range";
 
 export class VSelection {
     _range?: VRange;
@@ -65,8 +65,14 @@ export class VSelection {
         }
         this._lockSync = true;
         this.appliedInFrame = requestAnimationFrame(() => {
-            this._range?.applyToDom()
-            this._range?.applyToStore()
+            if (this._range) {
+                this._range.applyToDom()
+                this._range.applyToStore()
+            } else {
+                getSelection()?.removeAllRanges();
+                this._page.awarenessStore.setLocalRange(this._page, null)
+            }
+
             this._lockSync = false;
             this.appliedInFrame = 0;
         })

@@ -48,34 +48,31 @@ const deleteBackward = (selection: VSelection, model: BaseBlockModel, offset: nu
             transact(page, () => {
                 page.updateBlock(model, {type: 'text'})
             })
-        } else {
-            const findPreModel = (model: BaseBlockModel) => {
-                const parent = page.getParent(model);
-                if (!parent) {
-                    return
-                }
-                const index = parent.children.indexOf(model)
-                if (index === 0) {
-                    return parent;
-                }
-                const pre = parent.children[index - 1];
-                const getDeepLastChild = (model: BaseBlockModel): BaseBlockModel => {
-                    if (model.children.length) {
-                        return getDeepLastChild(model.children[model.children.length - 1])
-                    }
-                    return model;
-                }
-                return getDeepLastChild(pre)
+            return;
+        }
+        const parent = page.getParent(model);
+        if (!parent) {
+            return;
+        }
+        if (parent !== page.root) {
+            const ancestor = page.getParent(parent);
+            if (ancestor) {
+                transact(page, () => {
+                    page.moveBlocks([model], ancestor, parent, false)
+                })
+                selection.applyToDomAndStore()
             }
-            const pre = findPreModel(model);
+        } else {
+            const pre = page.getPreviousSibling(model)?.lastChild();
             const preText = pre?.text;
             const modelText = model?.text;
             if (pre && preText && modelText) {
                 const length = preText.length
-                const children = [...model.children, ...pre.children];
                 transact(page, () => {
                     preText.join(modelText)
-                    page.updateBlock(pre, {children: children});
+                    if (model.children.length) {
+                        page.moveBlocks(model.children, parent, model);
+                    }
                     page.deleteBlock(model)
                 })
                 selection.setRange(VRange.createCollapsedPoint(pre, length))
@@ -261,6 +258,37 @@ const changeFlavor = (model: BaseBlockModel, flavor: string) => {
     })
     return page.getBlockById(id);
 }
-export const handleIndent = (range: VRange) => {
+export const handleIndent = (selection: VSelection, range: VRange) => {
+    const start = range.startModel
+    const page = start.page;
+    const pre = page.getPreviousSibling(start);
+    if (!pre) {
+        return;
+    }
+    if (start === range.endModel) {
+        transact(page, () => {
+            if (pre.children.length) {
+                page.moveBlocks([start], pre, pre.children[pre.children.length - 1], false)
+            } else {
+                page.moveBlocks([start], pre, null, true)
+            }
+        })
+        selection.applyToDomAndStore();
+    }
+}
 
+export const handleCancelIndent = (selection: VSelection, range: VRange) => {
+    const start = range.startModel
+    const page = start.page;
+    const parent = page.getParent(start);
+    const ancestor = parent && page.getParent(parent)
+    if (!parent || !ancestor) {
+        return;
+    }
+    if (start === range.endModel) {
+        transact(page, () => {
+            page.moveBlocks([start], ancestor, parent, false)
+        })
+        selection.applyToDomAndStore();
+    }
 }

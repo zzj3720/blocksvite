@@ -57,11 +57,19 @@ const showPosition = computed(() => {
         const {vRange, rootRect, mousePoint} = data;
         let isBackward = vRange.startModel === vRange.endModel;
         const start = vRange.getStartAsRange();
-        const startRect = start.getBoundingClientRect();
+        const getRect = (range: Range) => {
+            if (range.getClientRects().length !== 0) {
+                return range.getBoundingClientRect();
+            }
+            const ele = range.startContainer instanceof Element ? range.startContainer : range.startContainer.parentElement;
+            return ele.getBoundingClientRect();
+        }
+        const startRect = getRect(start);
         computeAttributes(vRange);
         if (!isBackward) {
             isBackward = distance(startRect, mousePoint) < 20;
         }
+        console.log(start)
         if (isBackward) {
             return {
                 position: 'top',
@@ -70,7 +78,7 @@ const showPosition = computed(() => {
             }
         } else {
             const end = vRange.getEndAsRange();
-            const endRect = end.getBoundingClientRect();
+            const endRect = getRect(end);
             return {
                 position: 'bottom',
                 x: endRect.left - rootRect.left,
@@ -85,7 +93,7 @@ const computeAttributes = (vRange?: VRange) => {
         return {}
     }
     const deltas = vRange.getDelta();
-    attributes.value = detectAttr(deltas.filter(delta => delta.insert?.length).map(delta => delta.attributes??{}))
+    attributes.value = detectAttr(deltas.filter(delta => delta.insert?.length).map(delta => delta.attributes ?? {}))
 }
 const service = inject(BlockService)!
 type ActionType = typeof detectAttrList[number]

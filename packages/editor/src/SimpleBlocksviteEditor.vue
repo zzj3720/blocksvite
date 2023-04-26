@@ -22,7 +22,14 @@ pModel?.text?.insert(' ', 0, {})
 pModel?.text?.insert(' ', 0, {link: 'http://baidu.com', single: true})
 pModel?.text?.insert('asdasd', 0, {})
 const insideP = page.addBlock('blocksvite:paragraph', {}, p);
+const insidePModel = page.getBlockById(insideP)
+insidePModel?.text?.insert('bold', 0, {bold: true})
+insidePModel?.text?.insert('underline', 0, {underline: true})
+insidePModel?.text?.insert('strike', 0, {strike: true})
+insidePModel?.text?.insert('code', 0, {code: true})
 const list = page.addBlock('blocksvite:list', {}, pageBlockId);
+const listModel = page.getBlockById(list);
+listModel?.text?.insert('italic', 0, {italic: true});
 (window as any).page = page;
 </script>
 

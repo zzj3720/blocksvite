@@ -1,6 +1,6 @@
 <template>
     <div class="list">
-        <div contenteditable="false" style="padding: 0 4px;display:flex;align-items:center;user-select:none;">
+        <div contenteditable="false" class="prefix">
             •
         </div>
         <div>
@@ -23,5 +23,15 @@ defineProps<{
 <style scoped>
 .list {
     display: flex;
+}
+
+.prefix {
+    padding: 0 4px;
+    display: flex;
+    align-items: center;
+    user-select: none;
+    justify-content: center;
+    font-weight: bold;
+    height: calc(1.5em + 6px);
 }
 </style>
