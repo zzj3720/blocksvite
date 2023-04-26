@@ -2,16 +2,17 @@
     <div
             :data-blocksvite-text="props.model.id"
             contenteditable="true"
+            :placeholder="'asd'"
             class="text"
     >
-        <component
-                :is="render(segment.text,segment.attributes)"
+        <AttributeRender
                 v-for="(segment, i) in textLine"
                 :key="i"
+                :last="i===textLine.length-1"
                 :data-blocksvite-segment-index="i"
                 :attributes="segment.attributes"
                 :text="segment.text"
-        ></component>
+        ></AttributeRender>
     </div>
 </template>
 
@@ -19,8 +20,7 @@
 import {BaseBlockModel} from "@blocksuite/store";
 import {computed, onMounted, onUnmounted, ref} from "vue";
 import {InsertDelta, Line} from "../utils/types";
-import Normal from "./Normal.vue";
-import {render} from "./render";
+import {AttributeRender} from "./attributeRender";
 
 const props = defineProps<{
     model: BaseBlockModel
@@ -51,6 +51,7 @@ onUnmounted(() => {
 <style scoped>
 [contenteditable]:empty:after {
     content: attr(placeholder);
+    color: #bbbbbb;
 }
 
 .text {

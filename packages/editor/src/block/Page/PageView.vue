@@ -5,10 +5,9 @@
 </template>
 
 <script lang="ts" setup>
-import { BaseBlockModel } from "@blocksuite/store";
-import RenderChildren from "../help/RenderChildren.vue";
-
- defineProps<{
+import {BaseBlockModel} from "@blocksuite/store";
+import RenderChildren from "../RenderChildren.vue";
+defineProps<{
     model: BaseBlockModel
 }>()
 </script>

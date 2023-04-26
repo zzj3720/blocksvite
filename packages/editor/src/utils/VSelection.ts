@@ -1,6 +1,6 @@
 import {VRange} from "./VRange";
 import {Page, UserRange} from "@blocksuite/store";
-import {nativeRange} from "./range";
+import {getDomPointByVPoint, nativeRange} from "./range";
 
 export class VSelection {
     _range?: VRange;
@@ -43,7 +43,7 @@ export class VSelection {
         const native = nativeRange();
         if (native) {
             this._range = VRange.syncFromNative(this._page, native)
-            this._range.applyToStore();
+            this._range?.applyToStore();
         }
     }
 
@@ -51,8 +51,8 @@ export class VSelection {
         const startModel = this._page.getBlockById(userRange.blockIds[0]);
         const endModel = this._page.getBlockById(userRange.blockIds[userRange.blockIds.length - 1]);
         if (!startModel || !endModel) return
-        this._range = new VRange(this._page, startModel, userRange.startOffset, endModel, userRange.endOffset);
         requestAnimationFrame(() => {
+            this._range = new VRange(this._page, startModel, userRange.startOffset, endModel, userRange.endOffset);
             this._range?.applyToDom();
         })
     }

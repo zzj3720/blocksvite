@@ -25,6 +25,9 @@ export const provideBlocks = (blocks: BlockType[], page: Page) => {
         getVSelection(): VSelection {
             return selection
         },
+        getPage(): Page {
+            return page
+        }
     };
     provide(BlockService, service)
 }

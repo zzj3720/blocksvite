@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {Disposable as IDisposable, Page, StackItem} from "@blocksuite/store";
-import {computed, inject, onUnmounted, shallowRef} from "vue";
+import {computed, inject, onUnmounted, ref, shallowRef} from "vue";
 import {BlockService} from "./utils/children";
 import {
     handleDelete,
@@ -11,7 +11,9 @@ import {
     handleWordDelete
 } from "./utils/beforeInputHandel";
 import {cleanDom, nativeRange} from "./utils/range";
-import {useEventListener} from "@vueuse/core";
+import {onClickOutside, useEventListener} from "@vueuse/core";
+import BlockToolBar, {BlockToolBarProps} from "./ui/BlockToolBar.vue";
+import {VRange} from "./utils/VRange";
 
 const props = defineProps<{
     page: Page
@@ -126,15 +128,46 @@ const compositionend = (evt: CompositionEvent) => {
     handleInsertText(props.page, vRange, selection, evt.data)
     cleanDom(vRange.startModel)
 }
+const mouseup = (evt: MouseEvent) => {
+    const selection = blockService.getVSelection();
+    selection.applyToDomAndStore()
+    if (selection.vRange && !selection.vRange.isCollapsed) {
+        const containerRect = containerRef.value.getBoundingClientRect();
+        if (!containerRect) {
+            throw new Error('this is a bug')
+        }
+        showBlockToolBar.value = {
+            rootRect: containerRect,
+            vRange: selection.vRange,
+            mousePoint: {
+                x: evt.x,
+                y: evt.y,
+            }
+        }
+    } else {
+        showBlockToolBar.value = undefined;
+    }
+}
+const containerRef = ref<HTMLDivElement>()
+const showBlockToolBar = shallowRef<BlockToolBarProps>()
 </script>
 
 <template>
-    <div
-            v-if="root"
-            class="editor"
-            contenteditable="true" @beforeinput="beforeinput" @compositionstart="compositionstart"
-            @compositionend="compositionend">
-        <component :is="Render" :model="root"></component>
+    <div style="overflow-y: auto">
+        <div ref="containerRef" data-blocksvite-container="true" style="position: relative">
+            <BlockToolBar v-model:data="showBlockToolBar"></BlockToolBar>
+            <div
+                    :data-blocksvite-editor="props.page.id"
+                    v-if="root"
+                    class="editor"
+                    contenteditable="true"
+                    @mouseup="mouseup"
+                    @beforeinput="beforeinput"
+                    @compositionstart="compositionstart"
+                    @compositionend="compositionend">
+                <component :is="Render" :model="root"></component>
+            </div>
+        </div>
     </div>
 </template>
 

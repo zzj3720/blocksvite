@@ -5,9 +5,9 @@
 </template>
 
 <script lang="ts" setup>
-import { BaseBlockModel, Disposable } from "@blocksuite/store";
-import { inject, onUnmounted, shallowRef } from "vue";
-import { BlockService } from "../../utils/children";
+import {BaseBlockModel, Disposable} from "@blocksuite/store";
+import {inject, onUnmounted, shallowRef} from "vue";
+import {BlockService} from "../utils/children";
 
 const blockService = inject(BlockService)
 const props = defineProps<{

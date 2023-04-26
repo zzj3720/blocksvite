@@ -2,6 +2,7 @@ import {assertExists, BaseBlockModel, Page, Text as YText} from "@blocksuite/sto
 import {getSegments} from "./range";
 import {VRange} from "./VRange";
 import {VSelection} from "./VSelection";
+import {BaseTextAttributes} from "./base-attributes";
 
 const deleteSelected = (page: Page, vRange: VRange, selection: VSelection) => {
     const {start, end, others} = vRange.getAllSelectedModel();
@@ -34,7 +35,31 @@ const deleteBackward = (page: Page, selection: VSelection, model: BaseBlockModel
     }
     const pre = yText.toString().slice(0, offset);
     if (pre.length === 0) {
-
+        //TODO make it more configurable
+        if (model.flavour !== 'blocksvite:paragraph') {
+            transact(page, () => {
+                page.updateBlock(model, {flavour: 'blocksvite:paragraph'})
+            })
+        } else if (model.type !== 'text') {
+            transact(page, () => {
+                page.updateBlock(model, {type: 'text'})
+            })
+        } else {
+            const pre = page.getPreviousSibling(model)
+            const preText = pre?.text;
+            const modelText = model?.text;
+            if (pre && preText && modelText) {
+                const length = preText.length
+                const children = [...model.children, ...pre.children];
+                transact(page, () => {
+                    preText.join(modelText)
+                    page.updateBlock(pre, {children: children});
+                    page.deleteBlock(model)
+                })
+                selection.setRange(VRange.createCollapsedPoint(page, pre, length))
+            }
+        }
+        return
     }
     const segments = getSegments(pre, mode);
     const length = segments[segments.length - 1].segment.length;
@@ -83,17 +108,19 @@ export const handleLineDelete = (page: Page, vRange: VRange, selection: VSelecti
 
 }
 export const handleInsertText = (page: Page, vRange: VRange, selection: VSelection, data: string) => {
+    if (!vRange.isCollapsed) {
+        deleteSelected(page, vRange, selection);
+    }
+    const {startModel, startOffset} = vRange;
+    const text = startModel.text;
+    assertExists(text)
+    assertExists(text.yText.doc)
+    const deltas = text.sliceToDelta(startOffset - 1, startOffset + 1);
+    const attributes = deltas[0]?.insert?.length === 2 ? undefined : {}
     transact(page, () => {
-        if (!vRange.isCollapsed) {
-            deleteSelected(page, vRange, selection);
-        }
-        const {startModel, startOffset} = vRange;
-        const text = startModel.text;
-        assertExists(text)
-        assertExists(text.yText.doc)
-        text.insert(data, startOffset)
-        applyToDom(selection, VRange.createCollapsedPoint(page, startModel, startOffset + data.length))
+        text.insert(data, startOffset, attributes)
     })
+    applyToDom(selection, VRange.createCollapsedPoint(page, startModel, startOffset + data.length))
 }
 export const handleWordDelete = (page: Page, vRange: VRange, selection: VSelection) => {
     if (vRange.isCollapsed) {
@@ -141,12 +168,6 @@ export const handleBlockSplit = (
         selection.setRange(VRange.createCollapsedPoint(page, newModel, 0))
     }
 };
-export const handleBlockMergeToPrev = (page: Page, selection: VSelection, model: BaseBlockModel) => {
-    if (!(model.text instanceof YText)) return;
-    const parent = page.getParent(model);
-    if (!parent) return;
-
-}
 export const handleInsertParagraph = (page: Page, vRange: VRange, selection: VSelection) => {
     if (!vRange.isCollapsed) {
         handleDelete(page, vRange, selection)
@@ -160,4 +181,27 @@ const applyToDom = (selection: VSelection, vRange: VRange) => {
 }
 export const transact = <T>(page: Page, fn: () => T): T => {
     return page.doc.transact(fn, page.doc.clientID)
+}
+export const handleChangeSelectedAttributes = (page: Page, range: VRange, attributes: BaseTextAttributes) => {
+    const {start, end, others} = range.getAllSelectedModel();
+    transact(page, () => {
+        const startText = start.model.text;
+        if (range.startModel === range.endModel) {
+            startText?.format(start.offset, end.offset - start.offset, attributes)
+            return
+        }
+        const endText = end.model.text;
+        if (startText) {
+            startText.format(start.offset, startText.length - start.offset, attributes)
+        }
+        if (endText) {
+            endText.format(0, end.offset, attributes)
+        }
+        others.forEach((model) => {
+            const text = model.text
+            if (text) {
+                text.format(0, text.length, attributes)
+            }
+        })
+    })
 }

@@ -1,16 +1,20 @@
 <template>
-    <BlocksviteEditor :page="page"></BlocksviteEditor>
+    <div>
+        asd
+        <BlocksviteEditor :page="page"></BlocksviteEditor>
+    </div>
 </template>
 
 <script setup lang="ts">
 import BlocksviteEditor from "./BlocksviteEditor.vue";
-import {PageBlock, ParagraphBlock} from "./block";
-import {provideBlocks, useEditor} from "./utils/hooks";
+import {ListBlock, PageBlock, ParagraphBlock} from "./block";
+import {useEditor} from "./utils/hooks";
 
-const page = useEditor([ParagraphBlock, PageBlock])
-provideBlocks([ParagraphBlock, PageBlock], page)
+const page = useEditor([ParagraphBlock, PageBlock, ListBlock])
 const pageBlockId = page.addBlock('affine:page');
-page.addBlock('affine:paragraph', {}, pageBlockId);
+const p = page.addBlock('blocksvite:paragraph', {}, pageBlockId);
+const insideP = page.addBlock('blocksvite:paragraph', {}, p);
+const list = page.addBlock('blocksvite:list', {}, pageBlockId);
 (window as any).page = page;
 </script>
 
