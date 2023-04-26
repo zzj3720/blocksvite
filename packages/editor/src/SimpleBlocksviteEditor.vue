@@ -45,7 +45,7 @@ const list = page.addBlock('blocksvite:list', {}, pageBlockId);
 const listModel = page.getBlockById(list);
 listModel?.text?.insert('italic', 0, {italic: true});
 page.resetHistory();
-const todos = ['Full link support','Slash command', 'More blocks', 'Cursor UX improve', 'Drag and drop', 'More extensible', 'Database'];
+const todos = ['A successful project needs a beautiful icon','Full link support','Slash command', 'More blocks', 'Cursor UX improve', 'Drag and drop', 'More extensible', 'Database'];
 (window as any).page = page;
 </script>
 
