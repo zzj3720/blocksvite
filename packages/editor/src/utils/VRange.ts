@@ -150,6 +150,14 @@ export class VRange {
             blockIds: start.model === end.model ? [start.model.id] : [start.model.id, ...others.map(v => v.id), end.model.id]
         })
     }
+
+    collapseToStart() {
+        return VRange.createCollapsedPoint(this.startModel, this.startOffset)
+    }
+
+    collapseToEnd() {
+        return VRange.createCollapsedPoint(this.endModel, this.endOffset)
+    }
 }
 
 const findAllSelectedModel = (page: Page, start: BaseBlockModel, end: BaseBlockModel) => {

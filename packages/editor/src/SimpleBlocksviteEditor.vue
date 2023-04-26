@@ -15,7 +15,7 @@ const p = page.addBlock('blocksvite:paragraph', {}, pageBlockId);
 const pModel = page.getBlockById(p)
 pModel?.text?.insert('asdasd', 0, {})
 pModel?.text?.insert(' ', 0, {})
-pModel?.text?.insert(' ', 0, {link: 'http://baidu.com', single: true})
+pModel?.text?.insert(' ', 0, {ref: '@zzj3720', single: true})
 pModel?.text?.insert(' ', 0, {})
 pModel?.text?.insert(' ', 0, {link: 'http://baidu.com', single: true})
 pModel?.text?.insert(' ', 0, {})
@@ -30,6 +30,7 @@ insidePModel?.text?.insert('code', 0, {code: true})
 const list = page.addBlock('blocksvite:list', {}, pageBlockId);
 const listModel = page.getBlockById(list);
 listModel?.text?.insert('italic', 0, {italic: true});
+page.resetHistory();
 (window as any).page = page;
 </script>
 

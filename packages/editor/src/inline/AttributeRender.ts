@@ -2,6 +2,7 @@ import {BaseTextAttributes} from "../utils/base-attributes";
 import Link from "./Link.vue";
 import Normal from "./Normal.vue";
 import {defineComponent, h, mergeProps, PropType, useAttrs} from "vue";
+import Ref from "./Ref.vue";
 
 export const AttributeRender = defineComponent({
     props: {
@@ -19,6 +20,9 @@ export const AttributeRender = defineComponent({
         return () => {
             if (props.attributes.link) {
                 return h(Link, mergeProps(attrs, props) as any)
+            }
+            if (props.attributes.ref) {
+                return h(Ref, mergeProps(attrs, props) as any)
             }
             return h(Normal, mergeProps(attrs, props) as any)
         }

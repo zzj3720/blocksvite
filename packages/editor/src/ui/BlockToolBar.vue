@@ -69,7 +69,6 @@ const showPosition = computed(() => {
         if (!isBackward) {
             isBackward = distance(startRect, mousePoint) < 20;
         }
-        console.log(start)
         if (isBackward) {
             return {
                 position: 'top',

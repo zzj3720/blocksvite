@@ -67,8 +67,7 @@ useEventListener('keydown', (ev) => {
         ev.preventDefault();
     }
     if (ESC(ev)) {
-        console.log(ev)
-        selection.setRange();
+        selection.setRange(selection.vRange?.collapseToStart());
         ev.preventDefault();
     }
 
@@ -88,6 +87,7 @@ const beforeinput = (evt: Event) => {
     // [Input Events Level 2](https://w3c.github.io/input-events/#interface-InputEvent-Attributes)
     switch (evt.inputType) {
         case 'insertLineBreak': {
+            props.page.captureSync();
             handleInsertText(vRange, selection, '\n');
             break;
         }
@@ -97,6 +97,7 @@ const beforeinput = (evt: Event) => {
         }
 
         case 'insertParagraph': {
+            props.page.captureSync();
             handleInsertParagraph(vRange, selection)
             break;
         }
@@ -119,6 +120,7 @@ const beforeinput = (evt: Event) => {
         // deleteSoftLineBackward: Chrome on Mac: Cmd + Backspace
         case 'deleteHardLineBackward':
         case 'deleteSoftLineBackward': {
+            props.page.captureSync();
             handleLineDelete(vRange, selection);
             break;
         }
