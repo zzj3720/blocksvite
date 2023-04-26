@@ -1,7 +1,7 @@
 <template>
     <div style="padding: 0 12px">
         <div style="display:flex;align-items:center; justify-content: space-between">
-            <h2>BlocksVite Playground</h2>
+            <h2>Blocks<span style="color: #42b883">V</span>ite Playground</h2>
             <div style="padding-right: 20px;"><a href="https://github.com/zuozijian3720/blocksvite" target="_blank"><img
                     style="width: 24px;height: 24px;" :src="githubIcon" alt=""></a></div>
         </div>
