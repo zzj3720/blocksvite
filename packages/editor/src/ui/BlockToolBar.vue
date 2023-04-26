@@ -62,7 +62,7 @@ const showPosition = computed(() => {
                 return range.getBoundingClientRect();
             }
             const ele = range.startContainer instanceof Element ? range.startContainer : range.startContainer.parentElement;
-            return ele.getBoundingClientRect();
+            return ele!.getBoundingClientRect();
         }
         const startRect = getRect(start);
         computeAttributes(vRange);
