@@ -25,7 +25,7 @@ const hover = useElementHover(eleRef)
 .link {
     text-decoration: underline;
     cursor: pointer;
-    color: blue;
+    color: #606060;
 }
 
 .link::before:hover {
