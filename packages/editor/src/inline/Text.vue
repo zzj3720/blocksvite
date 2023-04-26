@@ -9,6 +9,7 @@
                 v-for="(segment, i) in textLine"
                 :key="i"
                 :last="i===textLine.length-1"
+                :preIsSingle="!!(textLine[i-1]?.attributes?.single)"
                 :data-blocksvite-segment-index="i"
                 :attributes="segment.attributes"
                 :text="segment.text"
@@ -21,30 +22,26 @@ import {BaseBlockModel} from "@blocksuite/store";
 import {computed, onMounted, onUnmounted, ref} from "vue";
 import {InsertDelta, Line} from "../utils/types";
 import {AttributeRender} from "./attributeRender";
+import {getFixedDelta} from "../utils/range";
 
 const props = defineProps<{
     model: BaseBlockModel
 }>()
-const yText = computed(() => props.model.text?.yText);
+const yText = computed(() => props.model.text);
 
 const getLine = (): Line => {
-    const delta = yText.value?.toDelta() as InsertDelta[];
-    return delta?.map(v => ({text: v.insert, attributes: v.attributes ?? {}})) ?? []
+    return getFixedDelta(yText.value)
 }
 
 const textLine = ref<Line>(getLine());
 const onUpdate = () => {
-    const delta = yText.value?.toDelta();
-    if (delta) {
-        textLine.value = getLine()
-    }
+    textLine.value = getLine()
 }
 onMounted(() => {
-    yText.value?.observe(onUpdate);
-
+    yText.value?.yText?.observe(onUpdate);
 })
 onUnmounted(() => {
-    yText.value?.unobserve(onUpdate)
+    yText.value?.yText?.unobserve(onUpdate)
 })
 </script>
 

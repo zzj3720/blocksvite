@@ -101,7 +101,7 @@ const clickAction = (type: ActionType) => {
         case "underline":
         case "code":
         case "italic":
-            handleChangeSelectedAttributes(page, vRange, {[type]: !attributes.value[type]})
+            handleChangeSelectedAttributes(vRange, {[type]: !attributes.value[type]})
             service.getVSelection().applyToDomAndStore();
             computeAttributes(service.getVSelection().vRange)
     }

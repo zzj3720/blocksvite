@@ -6,7 +6,6 @@ export class VRange {
     others: BaseBlockModel[]
 
     constructor(
-        private _page: Page,
         private _startModel: BaseBlockModel,
         private _startOffset: number,
         private _endModel: BaseBlockModel,
@@ -18,14 +17,14 @@ export class VRange {
             if (_startModel === _endModel) {
                 this.others = []
             } else {
-                this.others = VRange.getOthersByVRange(_page, _startModel, _startOffset, _endModel, _endOffset)
+                this.others = VRange.getOthersByVRange(_startModel, _startOffset, _endModel, _endOffset)
             }
         } else {
             this.others = others;
         }
     }
 
-    static getOthersByVRange(page: Page, start: BaseBlockModel, startOffset: number, end: BaseBlockModel, endOffset: number) {
+    static getOthersByVRange(start: BaseBlockModel, startOffset: number, end: BaseBlockModel, endOffset: number) {
         if (start === end) {
             return []
         }
@@ -34,7 +33,7 @@ export class VRange {
         const range = new Range();
         range.setStart(startPoint.node, startPoint.offset)
         range.setEnd(endPoint.node, endPoint.offset)
-        return this.getOthersByNativeRange(page, range)
+        return this.getOthersByNativeRange(start.page, range)
     }
 
     static getOthersByNativeRange(page: Page, range: Range) {
@@ -64,11 +63,11 @@ export class VRange {
         const start = getPointFromNativePoint(page, nativeRange.startContainer, nativeRange.startOffset, true);
         const end = getPointFromNativePoint(page, nativeRange.endContainer, nativeRange.endOffset, false);
         // console.log('sync', clone, start, end)
-        return new VRange(page, start.model, start.offset, end.model, end.offset, others);
+        return new VRange(start.model, start.offset, end.model, end.offset, others);
     }
 
-    static createCollapsedPoint(page: Page, model: BaseBlockModel, offset: number) {
-        return new VRange(page, model, offset, model, offset)
+    static createCollapsedPoint(model: BaseBlockModel, offset: number) {
+        return new VRange(model, offset, model, offset)
     }
 
     getStartAsRange() {
@@ -137,7 +136,6 @@ export class VRange {
             const range = new Range()
             range.setStart(startPoint.node, startPoint.offset)
             range.setEnd(endPoint.node, endPoint.offset)
-            // console.log('apply', this, range)
             selection.removeAllRanges();
             selection.addRange(range)
         }
@@ -145,7 +143,8 @@ export class VRange {
 
     applyToStore() {
         const {start, end, others} = this.getAllSelectedModel();
-        this._page.awarenessStore.setLocalRange(this._page, {
+        const page = start.model.page;
+        page.awarenessStore.setLocalRange(page, {
             startOffset: start.offset,
             endOffset: end.offset,
             blockIds: start.model === end.model ? [start.model.id] : [start.model.id, ...others.map(v => v.id), end.model.id]

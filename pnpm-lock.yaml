@@ -30,16 +30,19 @@ importers:
   packages/editor:
     specifiers:
       '@blocksuite/store': ^0.5.0-alpha.4
+      '@types/is-hotkey': ^0.1.7
       '@vueuse/core': ^10.1.0
+      is-hotkey: ^0.2.0
       vue: ^3.2.45
-      yjs: ^13.5.53
       zod: ^3.21.4
     dependencies:
-      '@blocksuite/store': 0.5.0-alpha.4_yjs@13.5.53
+      '@blocksuite/store': 0.5.0-alpha.4
       '@vueuse/core': 10.1.0_vue@3.2.47
+      is-hotkey: 0.2.0
       vue: 3.2.47
-      yjs: 13.5.53
       zod: 3.21.4
+    devDependencies:
+      '@types/is-hotkey': 0.1.7
 
   packages/utils:
     specifiers:
@@ -84,13 +87,13 @@ packages:
       zod: 3.21.4
     dev: false
 
-  /@blocksuite/store/0.5.0-alpha.4_yjs@13.5.53:
+  /@blocksuite/store/0.5.0-alpha.4:
     resolution: {integrity: sha512-91CQLLxb3ZSs7LTdy4fI4LjZRJ30X+kORCg5g3JenmkprU4JlOgQQvtwd4S+jlHvlddCtOiN7UHPuQ3jT4ysPg==}
     peerDependencies:
       yjs: ^13
     dependencies:
       '@blocksuite/global': 0.5.0-alpha.4
-      '@blocksuite/virgo': 0.5.0-alpha.4_yjs@13.5.53
+      '@blocksuite/virgo': 0.5.0-alpha.4
       '@types/flexsearch': 0.7.3
       buffer: 6.0.3
       flexsearch: 0.7.21
@@ -101,7 +104,6 @@ packages:
       nanoid: 4.0.2
       y-protocols: 1.0.5
       y-webrtc: 10.2.5
-      yjs: 13.5.53
       zod: 3.21.4
     transitivePeerDependencies:
       - bufferutil
@@ -110,14 +112,13 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@blocksuite/virgo/0.5.0-alpha.4_yjs@13.5.53:
+  /@blocksuite/virgo/0.5.0-alpha.4:
     resolution: {integrity: sha512-jNBYN5BUXlwdagTufydOr51koPeoMFo47Pts5YC15RyvoNXRUVRzDVQsYgRP504ozYrG/1VsJjAUlsD7OgdXyA==}
     peerDependencies:
       lit: ^2
       yjs: ^13
     dependencies:
       '@blocksuite/global': 0.5.0-alpha.4
-      yjs: 13.5.53
       zod: 3.21.4
     dev: false
 
@@ -322,6 +323,10 @@ packages:
   /@types/flexsearch/0.7.3:
     resolution: {integrity: sha512-HXwADeHEP4exXkCIwy2n1+i0f1ilP1ETQOH5KDOugjkTFZPntWo0Gr8stZOaebkxsdx+k0X/K6obU/+it07ocg==}
     dev: false
+
+  /@types/is-hotkey/0.1.7:
+    resolution: {integrity: sha512-yB5C7zcOM7idwYZZ1wKQ3pTfjA9BbvFqRWvKB46GFddxnJtHwi/b9y84ykQtxQPg5qhdpg4Q/kWU3EGoCTmLzQ==}
+    dev: true
 
   /@types/web-bluetooth/0.0.16:
     resolution: {integrity: sha512-oh8q2Zc32S6gd/j50GowEjKLoOVOwHP/bWVjKJInBwQqdOYMdPrf1oVlelTlyfFK3CKxL1uahMDAr+vy8T7yMQ==}
@@ -595,6 +600,10 @@ packages:
 
   /inherits/2.0.4:
     resolution: {integrity: sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==}
+    dev: false
+
+  /is-hotkey/0.2.0:
+    resolution: {integrity: sha512-UknnZK4RakDmTgz4PI1wIph5yxSs/mvChWs9ifnlXsKuXgWmOkY/hAE0H/k2MIqH0RlRye0i1oC07MCRSD28Mw==}
     dev: false
 
   /isomorphic.js/0.2.5:

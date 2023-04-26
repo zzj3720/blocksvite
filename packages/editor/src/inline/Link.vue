@@ -1,7 +1,5 @@
 <template>
-  <!--    <span class="link" ref="eleRef" :data-title="attributes.link">{{ ZERO_WIDTH_SPACE }}</span>-->
-    <span ref="eleRef">
-        <span contenteditable="false"><span></span><span class="link">{{
+    <span ref="eleRef">{{ preIsSingle ? '' : ''}}<span contenteditable="false"><span></span><span class="link">{{
             attributes.link
             }}</span><span></span></span>{{ last ? '\n' : '' }}
     </span>
@@ -11,11 +9,13 @@
 import {BaseTextAttributes} from "../utils/base-attributes";
 import {useElementHover} from "@vueuse/core";
 import {ref, watch} from "vue";
+import {ZERO_WIDTH_SPACE} from "../utils/consts";
 
 const props = defineProps<{
     attributes: BaseTextAttributes;
     text: string;
     last: boolean;
+    preIsSingle: boolean;
 }>();
 const eleRef = ref<HTMLSpanElement>()
 const hover = useElementHover(eleRef)

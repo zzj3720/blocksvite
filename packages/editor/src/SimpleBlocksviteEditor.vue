@@ -1,6 +1,5 @@
 <template>
     <div>
-        asd
         <BlocksviteEditor :page="page"></BlocksviteEditor>
     </div>
 </template>
@@ -13,6 +12,15 @@ import {useEditor} from "./utils/hooks";
 const page = useEditor([ParagraphBlock, PageBlock, ListBlock])
 const pageBlockId = page.addBlock('affine:page');
 const p = page.addBlock('blocksvite:paragraph', {}, pageBlockId);
+const pModel = page.getBlockById(p)
+pModel?.text?.insert('asdasd', 0, {})
+pModel?.text?.insert(' ', 0, {})
+pModel?.text?.insert(' ', 0, {link: 'http://baidu.com', single: true})
+pModel?.text?.insert(' ', 0, {})
+pModel?.text?.insert(' ', 0, {link: 'http://baidu.com', single: true})
+pModel?.text?.insert(' ', 0, {})
+pModel?.text?.insert(' ', 0, {link: 'http://baidu.com', single: true})
+pModel?.text?.insert('asdasd', 0, {})
 const insideP = page.addBlock('blocksvite:paragraph', {}, p);
 const list = page.addBlock('blocksvite:list', {}, pageBlockId);
 (window as any).page = page;

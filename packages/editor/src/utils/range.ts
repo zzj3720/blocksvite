@@ -1,6 +1,7 @@
-import {assertExists, BaseBlockModel, Page} from "@blocksuite/store";
+import {assertExists, BaseBlockModel, Page, Text as YText} from "@blocksuite/store";
 import {date} from "zod";
 import {ZERO_WIDTH_SPACE} from "./consts";
+import {Line, Segment} from "./types";
 
 export const nativeRange = () => {
     const selection = getSelection();
@@ -38,16 +39,15 @@ export const getPointFromNativePoint = (page: Page, node: Node, offset: number, 
         };
     }
     const index = segmentIndex(segment);
-    const deltas = model.text?.toDelta() ?? [];
+    const deltas = getFixedDelta(model.text);
     const targetDelta = deltas[index];
-    // console.log(node,segment,offset)
     if (targetDelta.attributes?.single) {
         if (node !== segment) {
             offset = 1;
         }
         offset = backward ? offset === 0 ? 0 : 1 : offset > 0 ? 1 : 0;
     }
-    const sum = deltas.slice(0, index).reduce((acc, v) => acc + (v.insert?.length ?? 0), 0)
+    const sum = deltas.slice(0, index).reduce((acc, v) => acc + v.text.length, 0)
     return {
         model,
         offset: sum + offset,
@@ -65,11 +65,11 @@ export const getDomPointByVPoint = (model: BaseBlockModel, offset: number, backw
     if (!ele) {
         throw new Error('this is a bug');
     }
-    const deltas = model.text?.toDelta() ?? [];
+    const deltas = getFixedDelta(model.text);
     let rest = offset;
     for (let i = 0; i < deltas.length; i++) {
         const delta = deltas[i];
-        const length = delta.insert?.length ?? 0;
+        const length = delta.text.length;
         if (length >= rest) {
             const segment = ele.querySelector(`[data-blocksvite-segment-index="${i}"]`)
             assertExists(segment);
@@ -123,4 +123,12 @@ export const inEditor = (node: Node, page: Page) => {
 
 export const closest = (node: Node, selector: string) => {
     return node instanceof Element ? node.closest(selector) : node.parentElement?.closest(selector)
+}
+export const getFixedDelta = (text?: YText): Line => {
+    return text?.toDelta().flatMap<Segment>(v => {
+        if (v.attributes?.single) {
+            return v.insert?.split('').map(text => ({text, attributes: v.attributes ?? {}})) ?? []
+        }
+        return {text: v.insert ?? '', attributes: v.attributes ?? {}}
+    }) ?? []
 }

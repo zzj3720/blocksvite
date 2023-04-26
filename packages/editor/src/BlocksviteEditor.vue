@@ -4,16 +4,17 @@ import {computed, inject, onUnmounted, ref, shallowRef} from "vue";
 import {BlockService} from "./utils/children";
 import {
     handleDelete,
-    handleForwardDelete,
+    handleForwardDelete, handleIndent,
     handleInsertParagraph,
     handleInsertText,
     handleLineDelete,
     handleWordDelete
 } from "./utils/beforeInputHandel";
 import {cleanDom, nativeRange} from "./utils/range";
-import {onClickOutside, useEventListener} from "@vueuse/core";
+import {useEventListener} from "@vueuse/core";
 import BlockToolBar, {BlockToolBarProps} from "./ui/BlockToolBar.vue";
-import {VRange} from "./utils/VRange";
+import {isHotkey} from 'is-hotkey'
+import {Redo, Tab, Undo} from "./utils/hotkey";
 
 const props = defineProps<{
     page: Page
@@ -43,16 +44,20 @@ const blockService = inject(BlockService)!
 const Render = computed(() => root.value && blockService?.component(root.value))
 
 useEventListener('keydown', (ev) => {
-    if (!blockService?.getVSelection().vRange) {
+    const vRange = blockService?.getVSelection().vRange;
+    if (!vRange) {
         return
     }
-    if (ev.metaKey && ev.key === 'z') {
+    if (Undo(ev)) {
         props.page.undo()
         ev.preventDefault();
     }
-    if (ev.metaKey && ev.shiftKey && ev.key === 'z') {
+    if (Redo(ev)) {
         props.page.redo()
         ev.preventDefault();
+    }
+    if (Tab(ev)) {
+        handleIndent(vRange)
     }
 })
 const beforeinput = (evt: Event) => {
@@ -70,30 +75,30 @@ const beforeinput = (evt: Event) => {
     // [Input Events Level 2](https://w3c.github.io/input-events/#interface-InputEvent-Attributes)
     switch (evt.inputType) {
         case 'insertLineBreak': {
-            handleInsertText(props.page, vRange, selection, '\n');
+            handleInsertText(vRange, selection, '\n');
             break;
         }
         case 'insertText': {
-            handleInsertText(props.page, vRange, selection, evt.data ?? '');
+            handleInsertText(vRange, selection, evt.data ?? '');
             break;
         }
 
         case 'insertParagraph': {
-            handleInsertParagraph(props.page, vRange, selection)
+            handleInsertParagraph(vRange, selection)
             break;
         }
 
         // Chrome and Safari on Mac: Backspace or Ctrl + H
         case 'deleteContentBackward':
         case 'deleteByCut': {
-            handleDelete(props.page, vRange, selection);
+            handleDelete(vRange, selection);
             break;
         }
 
         // On Mac: Option + Backspace
         // On iOS: Hold the backspace for a while and the whole words will start to disappear
         case 'deleteWordBackward': {
-            handleWordDelete(props.page, vRange, selection);
+            handleWordDelete(vRange, selection);
             break;
         }
 
@@ -101,14 +106,14 @@ const beforeinput = (evt: Event) => {
         // deleteSoftLineBackward: Chrome on Mac: Cmd + Backspace
         case 'deleteHardLineBackward':
         case 'deleteSoftLineBackward': {
-            handleLineDelete(props.page, vRange, selection);
+            handleLineDelete(vRange, selection);
             break;
         }
 
         // Chrome on Mac: Fn + Backspace or Ctrl + D
         // Safari on Mac: Ctrl + K or Ctrl + D
         case 'deleteContentForward': {
-            handleForwardDelete(props.page, vRange, selection);
+            handleForwardDelete(vRange, selection);
             break;
         }
     }
@@ -125,7 +130,7 @@ const compositionend = (evt: CompositionEvent) => {
         return
     }
 
-    handleInsertText(props.page, vRange, selection, evt.data)
+    handleInsertText(vRange, selection, evt.data)
     cleanDom(vRange.startModel)
 }
 const mouseup = (evt: MouseEvent) => {
@@ -153,13 +158,13 @@ const showBlockToolBar = shallowRef<BlockToolBarProps>()
 </script>
 
 <template>
-    <div style="overflow-y: auto">
-        <div ref="containerRef" data-blocksvite-container="true" style="position: relative">
+    <div class="editor">
+        <div ref="containerRef" class="scroll-container" data-blocksvite-container="true" style="position: relative">
             <BlockToolBar v-model:data="showBlockToolBar"></BlockToolBar>
             <div
                     :data-blocksvite-editor="props.page.id"
                     v-if="root"
-                    class="editor"
+                    class="editor-editable"
                     contenteditable="true"
                     @mouseup="mouseup"
                     @beforeinput="beforeinput"
@@ -176,7 +181,20 @@ const showBlockToolBar = shallowRef<BlockToolBarProps>()
     line-height: 1.5;
     font-size: 16px;
     border: 2px solid black;
-    outline: none;
     border-radius: 4px;
+    overflow-y: auto;
+    height: 500px;
+}
+
+.editor-editable {
+    padding: 48px 12px;
+    outline: none;
+    flex: 1;
+}
+
+.scroll-container {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 </style>
