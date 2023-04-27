@@ -1,5 +1,5 @@
 <template>
-    <span :class="classNames" class="segment">{{ text.endsWith('\n') ? text + '\n' : text }}</span>
+    <span :class="classNames" class="segment">{{ !last ? text : text.endsWith('\n') ? text + '\n' : text }}</span>
 </template>
 
 <script lang="ts" setup>
@@ -9,6 +9,7 @@ import {BaseTextAttributes} from "../utils/base-attributes";
 const props = defineProps<{
     attributes: BaseTextAttributes;
     text: string;
+    last:boolean;
 }>();
 const classNames = computed<string[]>(() => {
     return Object.entries(props.attributes).filter(([_, v]) => v === true).map(([key, _]) => key)
