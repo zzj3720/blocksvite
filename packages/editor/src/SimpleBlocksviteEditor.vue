@@ -7,8 +7,8 @@
         </div>
         <BlocksviteEditor :page="page"></BlocksviteEditor>
         <div style="margin-top: 12px;">
-            A simple Vue version <a href="https://blocksuite.affine.pro/" target="_blank">BlockSuite</a> based on <a
-                href="https://github.com/toeverything/blocksuite" target="_blank">@blocksuite/store</a>
+            A simple Block Editor like <a href="https://blocksuite.affine.pro/" target="_blank">BlockSuite</a>, based on Vue and <a
+            href="https://github.com/toeverything/blocksuite" target="_blank">@blocksuite/store</a>
         </div>
         <h3 style="margin-top: 24px;">
             Todo
