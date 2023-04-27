@@ -10,7 +10,7 @@
 
 ---
 
-A simple Block editor like <a href="https://blocksuite.affine.pro/" target="_blank">BlockSuite</a>, based on Vue and <a
+A simple Block Editor like <a href="https://blocksuite.affine.pro/" target="_blank">BlockSuite</a>, based on Vue and <a
                 href="https://github.com/toeverything/blocksuite" target="_blank">@blocksuite/store</a>
 
 - 👉 [Try BlocksVite online](https://blocksvite-playground.vercel.app/)
