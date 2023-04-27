@@ -17,19 +17,19 @@ A simple Block editor like <a href="https://blocksuite.affine.pro/" target="_bla
 ## Introduction
 TODO
 
-## Feature
+## Features
 
--[x] Basic inline edit
--[x] Basic block edit
--[x] Mention style
--[x] Undo and Redo
--[x] Inline Formatting Toolbar
--[x] Indent'
--[ ] Slash command
--[ ] Copy and Paste and Export
--[ ] Full link support
--[ ] More blocks(Code, Quote, Image etc.)
--[ ] Cursor UX improve
--[ ] Drag and Drop
--[ ] More extensible
--[ ] Database
+- [x] Basic inline edit
+- [x] Basic block edit
+- [x] Mention style
+- [x] Undo and Redo
+- [x] Inline Formatting Toolbar
+- [x] Indent'
+- [ ] Slash command
+- [ ] Copy and Paste and Export
+- [ ] Full link support
+- [ ] More blocks(Code, Quote, Image etc.)
+- [ ] Cursor UX improve
+- [ ] Drag and Drop
+- [ ] More extensible
+- [ ] Database
