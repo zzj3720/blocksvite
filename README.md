@@ -8,8 +8,6 @@
   </picture>
 </p>
 
----
-
 A simple Block Editor like <a href="https://blocksuite.affine.pro/" target="_blank">BlockSuite</a>, based on Vue and <a
                 href="https://github.com/toeverything/blocksuite" target="_blank">@blocksuite/store</a>
 
