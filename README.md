@@ -1,10 +1,10 @@
 # BlocksVite
 
 <p align="center">
-  <picture style="width: 500px">
-    <source media="(prefers-color-scheme: light)" srcset="https://user-images.githubusercontent.com/17165520/234758110-ab5c4c5c-c5aa-432b-a864-0642e2de43b0.png" />
-    <source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/17165520/234758824-713ec7db-e121-4960-8f92-5007e86d6860.png" />
-    <img src="https://user-images.githubusercontent.com/17165520/234758110-ab5c4c5c-c5aa-432b-a864-0642e2de43b0.png" width="500" />
+  <picture style="width: 600px">
+    <source media="(prefers-color-scheme: light)" srcset="https://user-images.githubusercontent.com/17165520/235313228-523f649b-24e7-4b53-8f95-4287969a5812.png" />
+    <source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/17165520/235313248-976ab68c-c737-419f-8481-3b635dac8c7b.png" />
+    <img src="https://user-images.githubusercontent.com/17165520/235313477-d979b4ef-072c-4985-8559-c914d1d2b35b.svg" width="600" />
   </picture>
 </p>
 
